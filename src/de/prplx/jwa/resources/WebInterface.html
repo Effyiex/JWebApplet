@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> loading... </title>
+    <script type="text/javascript">
+
+      const FRAMERATE = 30;
+
+      var appletCanvas;
+      var renderRoutine;
+      var appletToken;
+
+      function randomInt(min, max) {
+        return min + Math.floor(Math.random() * (max - min));
+      }
+
+      function scaleApplet() {
+        appletCanvas.style.position = "absolute";
+        appletCanvas.style.left = "0";
+        appletCanvas.style.top = "0";
+        appletCanvas.width = window.innerWidth;
+        appletCanvas.height = window.innerHeight;
+      }
+
+      function changeFavicon(src) {
+        var link = document.createElement('link'),
+            oldLink = document.getElementById('dynamic-favicon');
+        link.id = 'dynamic-favicon';
+        link.rel = 'shortcut icon';
+        link.href = src;
+        if(oldLink) document.head.removeChild(oldLink);
+        document.head.appendChild(link);
+      }
+
+      function appletRequest(command, getter) {
+        var securedConnection = 0 <= document.URL.indexOf("https://");
+        var baseURL = document.URL.replace("http://", "").replace("https://", "").split('/')[0];
+        var xhr = new XMLHttpRequest();
+        xhr.onerror = () => { /* ignore */ };
+        xhr.onreadystatechange = () => { /* ignore*/ };
+        xhr.open("GET", (securedConnection ? "https://" : "http://") + baseURL + "/" + command);
+        if(getter) xhr.onload = () => getter(xhr);
+        xhr.send();
+      }
+
+      var frameCounter = 0;
+
+      function renderApplet() {
+        var width = appletCanvas.width;
+        var height = appletCanvas.height;
+        var appScreen = new Image;
+        appScreen.src = "render-applet/" + appletToken + '/' + width + '/' + height + '/' + frameCounter;
+        appScreen.addEventListener("load", () => appletCanvas.getContext("2d").drawImage(appScreen, 0, 0));
+        frameCounter++;
+      }
+
+      var faviconSource;
+
+      window.addEventListener("load", () => {
+
+        appletRequest("generate-applet-token", xhr => {
+          appletToken = xhr.responseText;
+          console.log("Applet-Token: " + appletToken);
+        });
+
+        appletCanvas = document.getElementById("applet-canvas");
+        renderRoutine = setInterval(renderApplet, 1000.0 / FRAMERATE);
+
+        setInterval(() => {
+          appletRequest("fetch-applet-title/" + appletToken, xhr => {
+            if(document.title != xhr.responseText)
+            document.title = xhr.responseText
+          });
+        }, 1000);
+
+        setInterval(() => {
+          appletRequest("fetch-applet-favicon/" + appletToken, xhr => {
+            if(faviconSource != xhr.responseText) {
+              faviconSource = xhr.responseText;
+              changeFavicon(faviconSource);
+            }
+          });
+        })
+
+        this.scaleApplet();
+
+      });
+
+      var pointerPressed = false;
+      var pointerLocation = { x: 0, y: 0 };
+
+      function sendPointerUpdate() {
+        appletRequest("update-pointer/" + appletToken + '/' + pointerLocation.x + '/' + pointerLocation.y + '/' + (pointerPressed ? "pressed" : "released"));
+      }
+
+      window.addEventListener("mousemove", event => {
+        pointerLocation.x = event.offsetX;
+        pointerLocation.y = event.offsetY;
+        sendPointerUpdate();
+      });
+
+      window.addEventListener("mousedown", event => {
+        if(event.button == 0) {
+          pointerLocation.x = event.offsetX;
+          pointerLocation.y = event.offsetY;
+          pointerPressed = true;
+          sendPointerUpdate();
+        }
+      });
+
+      window.addEventListener("mouseup", event => {
+        if(event.button == 0) {
+          pointerLocation.x = event.offsetX;
+          pointerLocation.y = event.offsetY;
+          pointerPressed = false;
+          sendPointerUpdate();
+        }
+      });
+
+      window.addEventListener("resize", scaleApplet);
+
+    </script>
+  </head>
+  <body>
+    <canvas id="applet-canvas"> </canvas>
+  </body>
+</html>
