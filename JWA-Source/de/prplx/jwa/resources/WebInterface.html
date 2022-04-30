@@ -7,7 +7,7 @@
     <title> loading... </title>
     <script type="text/javascript">
 
-      const FRAMERATE = 30;
+      const FRAMERATE = 24;
 
       var appletCanvas;
       var renderRoutine;
@@ -23,16 +23,6 @@
         appletCanvas.style.top = "0";
         appletCanvas.width = window.innerWidth;
         appletCanvas.height = window.innerHeight;
-      }
-
-      function changeFavicon(src) {
-        var link = document.createElement('link'),
-            oldLink = document.getElementById('dynamic-favicon');
-        link.id = 'dynamic-favicon';
-        link.rel = 'shortcut icon';
-        link.href = src;
-        if(oldLink) document.head.removeChild(oldLink);
-        document.head.appendChild(link);
       }
 
       function appletRequest(command, getter) {
@@ -77,12 +67,13 @@
         }, 1000);
 
         setInterval(() => {
-          appletRequest("fetch-applet-favicon/" + appletToken, xhr => {
-            if(faviconSource != xhr.responseText) {
-              faviconSource = xhr.responseText;
-              changeFavicon(faviconSource);
-            }
-          });
+          var link = document.createElement("link"),
+              oldLink = document.getElementById("dynamic-favicon");
+          link.id = "dynamic-favicon";
+          link.rel = "shortcut icon";
+          link.href = "fetch-applet-favicon";
+          if(oldLink) document.head.removeChild(oldLink);
+          document.head.appendChild(link);
         })
 
         this.scaleApplet();

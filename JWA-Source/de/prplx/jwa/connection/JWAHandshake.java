@@ -18,7 +18,12 @@ public interface JWAHandshake {
                 client.write(client.applet.getWebInterface().getBytes());
                 client.flush();
             } else if(request.equals("/fetch-applet-favicon")) {
-
+                try {
+                    ImageIO.write(client.applet.getFavicon(), "PNG", client.socket.getOutputStream());
+                } catch (IOException e) {
+                    // ignore
+                }
+                client.flush();
             } else if(request.equals("/generate-applet-token")) {
                 client.write(client.applet.instances.register().token.getBytes());
                 client.flush();

@@ -6,7 +6,10 @@ import de.prplx.jwa.connection.JWASocket;
 import de.prplx.jwa.rendering.JWAScene;
 import de.prplx.jwa.utilities.JWAUtilities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 
 public class JWebApplet {
@@ -30,6 +33,7 @@ public class JWebApplet {
     private JWAScene defaultScene = new JWAScene("EMPTY-SCENE");
 
     private String webInterface;
+    private BufferedImage favicon;
 
     public JWebApplet(int port) throws PortAlreadyBoundException {
         this.port = port;
@@ -39,6 +43,21 @@ public class JWebApplet {
             throw new PortAlreadyBoundException(port);
         }
         this.webInterface = JWAUtilities.read(JWebApplet.class, "resources/WebInterface.html");
+        try {
+            InputStream faviconStream = this.getClass().getResourceAsStream("resources/DefaultFavicon.png");
+            this.favicon = ImageIO.read(faviconStream);
+            faviconStream.close();
+        } catch (IOException e) {
+            this.favicon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        }
+    }
+
+    public BufferedImage getFavicon() {
+        return favicon;
+    }
+
+    public void setFavicon(BufferedImage favicon) {
+        this.favicon = favicon;
     }
 
     public JWAHandshake getHandshake() {
