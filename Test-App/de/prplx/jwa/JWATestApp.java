@@ -1,4 +1,5 @@
-import de.prplx.jwa.JWebApplet;
+package de.prplx.jwa;
+
 import de.prplx.jwa.connection.JWASession;
 import de.prplx.jwa.rendering.JWAComponent;
 import de.prplx.jwa.rendering.JWAScene;
@@ -6,7 +7,7 @@ import de.prplx.jwa.utilities.JWALogger;
 
 import java.awt.*;
 
-public class TestApplication {
+public class JWATestApp {
 
     public static class Button extends JWAComponent {
 
