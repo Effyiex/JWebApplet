@@ -68,12 +68,22 @@ public class JWebApplet {
         this.handshake = handshake;
     }
 
+    private int webFrameRate = 24;
+
+    public void setFramerate(int framerate) {
+        this.webFrameRate = framerate;
+    }
+
+    public int getFrameRate() {
+        return webFrameRate;
+    }
+
     public void setWebInterface(String webInterface) {
         this.webInterface = webInterface;
     }
 
     public String getWebInterface() {
-        return webInterface;
+        return webInterface.replace("/*FRAMERATE*/", String.valueOf(webFrameRate));
     }
 
     public void setDefaultScene(JWAScene scene) {

@@ -36,6 +36,7 @@ public class JWATestApp {
         JWAScene scene = new JWAScene("TestLol", new Button("TestLol", "32p", "32p", "5%", "5%"));
         scene.setBackground(Color.BLACK);
         JWebApplet applet = new JWebApplet(80);
+        applet.setFramerate(30);
         applet.setDefaultScene(scene);
         applet.start();
     }
