@@ -45,7 +45,7 @@ public abstract class JWAComponent {
         );
     }
 
-    public abstract void render(JWASession session, Graphics2D g);
+    public abstract void render(JWASession session, JWAGraphics g);
     public abstract void click(JWASession session);
 
 }

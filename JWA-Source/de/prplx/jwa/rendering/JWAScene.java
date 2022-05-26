@@ -3,17 +3,15 @@ package de.prplx.jwa.rendering;
 import de.prplx.jwa.connection.JWASession;
 import de.prplx.jwa.utilities.JWAVector;
 
-import java.awt.*;
-
 public class JWAScene {
 
-    private static Color defaultBackground = new Color(33, 33, 36);
+    private static JWAColor defaultBackground = new JWAColor(0.125F, 0.125F, 0.13F);
 
-    public static void setDefaultBackground(Color defaultBackground) {
+    public static void setDefaultBackground(JWAColor defaultBackground) {
         JWAScene.defaultBackground = defaultBackground;
     }
 
-    public static Color getDefaultBackground() {
+    public static JWAColor getDefaultBackground() {
         return defaultBackground;
     }
 
@@ -25,19 +23,19 @@ public class JWAScene {
         this.components = new JWAVector(components);
     }
 
-    private Color background = JWAScene.defaultBackground;
+    private JWAColor background = null;
 
-    public void setBackground(Color background) {
+    public void setBackground(JWAColor background) {
         this.background = background;
     }
 
-    public Color getBackground() {
+    public JWAColor getBackground() {
         return background;
     }
 
-    public void render(JWASession session, Graphics2D g) {
-        g.setColor(background);
-        g.fillRect(0, 0, session.getScreen().getWidth(), session.getScreen().getHeight());
+    public void render(JWASession session, JWAGraphics g) {
+        g.color(background != null ? background : defaultBackground);
+        g.rectangle(0, 0, session.getScreen().getWidth(), session.getScreen().getHeight());
         this.components.forEach(component -> {
             component.preRender(session);
             component.render(session, g);

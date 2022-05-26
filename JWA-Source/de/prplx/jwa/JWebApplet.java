@@ -29,6 +29,8 @@ public class JWebApplet {
     public final ServerSocket socket;
     public final int port;
 
+    private boolean saveSessions = false;
+
     private JWAHandshake handshake = JWAHandshake.DEFAULT;
     private JWAScene defaultScene = new JWAScene("EMPTY-SCENE");
 
@@ -50,6 +52,10 @@ public class JWebApplet {
         } catch (IOException e) {
             this.favicon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
         }
+    }
+
+    public void saveSessions() {
+        this.saveSessions = true;
     }
 
     public BufferedImage getFavicon() {
@@ -92,6 +98,16 @@ public class JWebApplet {
 
     public JWAScene getDefaultScene() {
         return defaultScene;
+    }
+
+    private float resolutionMultiplier = 1.0F;
+
+    public void setResolutionMultiplier(float resolutionMultiplier) {
+        this.resolutionMultiplier = resolutionMultiplier;
+    }
+
+    public float getResolutionMultiplier() {
+        return resolutionMultiplier;
     }
 
     private boolean active = false;

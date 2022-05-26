@@ -20,7 +20,7 @@ public interface JWAHandshake {
             } else if(request.equals("/fetch-applet-favicon")) {
                 try {
                     ImageIO.write(client.applet.getFavicon(), "PNG", client.socket.getOutputStream());
-                } catch (IOException e) {
+                } catch (Exception e) {
                     // ignore
                 }
                 client.flush();

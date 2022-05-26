@@ -1,5 +1,6 @@
 package de.prplx.jwa.connection;
 
+import de.prplx.jwa.rendering.JWAGraphics;
 import de.prplx.jwa.utilities.*;
 import de.prplx.jwa.JWebApplet;
 import de.prplx.jwa.rendering.JWAScene;
@@ -58,6 +59,14 @@ public class JWASession {
 
     public final Map<String, Object> definitions = new HashMap();
 
+    public void def(String label, Object value) {
+        this.definitions.put(label, value);
+    }
+
+    public Object def(String label) {
+        return definitions.get(label);
+    }
+
     public final String token;
     public final JWebApplet applet;
 
@@ -86,10 +95,13 @@ public class JWASession {
 
     public void renderSession(int width, int height) {
         this.lastUpdate = System.currentTimeMillis();
+        float resMult = applet.getResolutionMultiplier();
+        width = (int) (resMult * width);
+        height = (int) (resMult * height);
         this.screen = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = screen.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        this.scene.render(this, g);
+        this.scene.render(this, new JWAGraphics(g));
     }
 
     private JWAPointer prevPointer = new JWAPointer(0, 0, false);
@@ -101,9 +113,11 @@ public class JWASession {
     public void updatePointer(int x, int y, boolean state) {
         if(!prevPointer.isPressed() && state)
         this.scene.components.forEach(component -> {
-            if(component.isHovered())
-            component.click(this);
+            if(component.isHovered()) component.click(this);
         });
+        float resMult = applet.getResolutionMultiplier();
+        x = (int) (x * resMult);
+        y = (int) (y * resMult);
         this.prevPointer = new JWAPointer(x, y, state);
     }
 

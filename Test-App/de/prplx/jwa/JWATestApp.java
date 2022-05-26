@@ -1,7 +1,9 @@
 package de.prplx.jwa;
 
 import de.prplx.jwa.connection.JWASession;
+import de.prplx.jwa.rendering.JWAColor;
 import de.prplx.jwa.rendering.JWAComponent;
+import de.prplx.jwa.rendering.JWAGraphics;
 import de.prplx.jwa.rendering.JWAScene;
 import de.prplx.jwa.utilities.JWALogger;
 
@@ -19,9 +21,13 @@ public class JWATestApp {
         }
 
         @Override
-        public void render(JWASession session, Graphics2D g) {
-            g.setColor(isHovered() ? Color.GRAY: Color.WHITE);
-            g.fillRect(postBounds.getX(), postBounds.getY(), postBounds.getWidth(), postBounds.getHeight());
+        public void render(JWASession session, JWAGraphics g) {
+            g.outline(new JWAColor(1, 0.125F, 0.75F));
+            g.color(isHovered() ? new JWAColor(0.5F, 0.5F, 0.5F): new JWAColor(1, 1, 1));
+            g.rectangle(postBounds.getX(), postBounds.getY(), postBounds.getWidth(), postBounds.getHeight());
+            g.outline(null);
+            g.color(new JWAColor(1.0F, 0.25F, 0.75F));
+            g.text(label, postBounds.getX() + 4, postBounds.getY() + postBounds.getHeight() / 3 * 2);
         }
 
         @Override
@@ -34,8 +40,9 @@ public class JWATestApp {
     public static void main(String[] args) throws JWebApplet.PortAlreadyBoundException {
         JWALogger.setState(false);
         JWAScene scene = new JWAScene("TestLol", new Button("TestLol", "32p", "32p", "5%", "5%"));
-        scene.setBackground(Color.BLACK);
+        scene.setBackground(new JWAColor(0, 0, 0));
         JWebApplet applet = new JWebApplet(80);
+        applet.setResolutionMultiplier(0.5F);
         applet.setFramerate(30);
         applet.setDefaultScene(scene);
         applet.start();

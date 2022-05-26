@@ -45,7 +45,7 @@
         var height = appletCanvas.height;
         var appScreen = new Image;
         appScreen.src = "render-applet/" + appletToken + '/' + width + '/' + height + '/' + frameCounter;
-        appScreen.addEventListener("load", () => appletCanvas.getContext("2d").drawImage(appScreen, 0, 0));
+        appScreen.addEventListener("load", () => appletCanvas.getContext("2d").drawImage(appScreen, 0, 0, window.innerWidth, window.innerHeight));
         frameCounter++;
       }
 
@@ -53,10 +53,14 @@
 
       window.addEventListener("load", () => {
 
-        appletRequest("generate-applet-token", xhr => {
-          appletToken = xhr.responseText;
-          console.log("Applet-Token: " + appletToken);
-        });
+        if(localStorage.getItem("jwa.token")) {
+          appletToken = localStorage.getItem("jwa.token");
+        } else {
+          appletRequest("generate-applet-token", xhr => {
+            appletToken = xhr.responseText;
+            console.log("Applet-Token: " + appletToken);
+          });
+        }
 
         appletCanvas = document.getElementById("applet-canvas");
         renderRoutine = setInterval(renderApplet, 1000.0 / FRAMERATE);
