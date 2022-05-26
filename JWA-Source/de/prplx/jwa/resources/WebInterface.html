@@ -80,7 +80,9 @@
           link.href = "fetch-applet-favicon";
           if(oldLink) document.head.removeChild(oldLink);
           document.head.appendChild(link);
-        })
+        }, 512);
+
+        setInterval(sendPointerUpdate, 64);
 
         this.scaleApplet();
 
@@ -93,10 +95,21 @@
         appletRequest("update-pointer/" + appletToken + '/' + pointerLocation.x + '/' + pointerLocation.y + '/' + (pointerPressed ? "pressed" : "released"));
       }
 
+      window.addEventListener("touchstart", event => {
+        pointerLocation.x = Math.floor(event.touches[0].clientX);
+        pointerLocation.y = Math.floor(event.touches[0].clientY);
+        pointerPressed = true;
+      });
+
+      window.addEventListener("touchend", event => {
+        pointerLocation.x = Math.floor(event.touches[0].clientX);
+        pointerLocation.y = Math.floor(event.touches[0].clientY);
+        pointerPressed = false;
+      });
+
       window.addEventListener("mousemove", event => {
         pointerLocation.x = event.offsetX;
         pointerLocation.y = event.offsetY;
-        sendPointerUpdate();
       });
 
       window.addEventListener("mousedown", event => {
@@ -104,7 +117,6 @@
           pointerLocation.x = event.offsetX;
           pointerLocation.y = event.offsetY;
           pointerPressed = true;
-          sendPointerUpdate();
         }
       });
 
@@ -113,7 +125,6 @@
           pointerLocation.x = event.offsetX;
           pointerLocation.y = event.offsetY;
           pointerPressed = false;
-          sendPointerUpdate();
         }
       });
 

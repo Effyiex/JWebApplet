@@ -38,7 +38,7 @@ public interface JWAHandshake {
                         session.renderSession(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
                         try {
                             ImageIO.write(session.getScreen(), "JPG", client.socket.getOutputStream());
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             // ignore
                         }
                         client.flush();

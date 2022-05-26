@@ -95,9 +95,9 @@ public class JWASession {
 
     public void renderSession(int width, int height) {
         this.lastUpdate = System.currentTimeMillis();
-        float resMult = applet.getResolutionMultiplier();
-        width = (int) (resMult * width);
-        height = (int) (resMult * height);
+        float resFactor = applet.getResolutionMultiplier();
+        width = (int) (resFactor * width);
+        height = (int) (resFactor * height);
         this.screen = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = screen.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -115,9 +115,9 @@ public class JWASession {
         this.scene.components.forEach(component -> {
             if(component.isHovered()) component.click(this);
         });
-        float resMult = applet.getResolutionMultiplier();
-        x = (int) (x * resMult);
-        y = (int) (y * resMult);
+        float resFactor = applet.getResolutionMultiplier();
+        x = (int) (x * resFactor);
+        y = (int) (y * resFactor);
         this.prevPointer = new JWAPointer(x, y, state);
     }
 

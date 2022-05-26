@@ -23,6 +23,16 @@ public class JWAScene {
         this.components = new JWAVector(components);
     }
 
+    private boolean smooth = true;
+
+    public void setSmooth(boolean antiAliasing) {
+        this.smooth = antiAliasing;
+    }
+
+    public boolean isSmooth() {
+        return smooth;
+    }
+
     private JWAColor background = null;
 
     public void setBackground(JWAColor background) {
@@ -34,6 +44,7 @@ public class JWAScene {
     }
 
     public void render(JWASession session, JWAGraphics g) {
+        if(smooth) g.smooth();
         g.color(background != null ? background : defaultBackground);
         g.rectangle(0, 0, session.getScreen().getWidth(), session.getScreen().getHeight());
         this.components.forEach(component -> {

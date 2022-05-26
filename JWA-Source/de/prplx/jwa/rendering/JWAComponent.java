@@ -4,8 +4,6 @@ import de.prplx.jwa.utilities.JWAPointer;
 import de.prplx.jwa.utilities.JWAUtilities;
 import de.prplx.jwa.connection.JWASession;
 
-import java.awt.*;
-
 public abstract class JWAComponent {
 
     protected JWABounds<String> preBounds = new JWABounds("0p", "0p", "0p", "0p");

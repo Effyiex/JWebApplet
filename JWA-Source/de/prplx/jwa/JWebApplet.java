@@ -1,5 +1,6 @@
 package de.prplx.jwa;
 
+import com.sun.security.ntlm.Server;
 import de.prplx.jwa.connection.JWAHandshake;
 import de.prplx.jwa.connection.JWASession;
 import de.prplx.jwa.connection.JWASocket;
